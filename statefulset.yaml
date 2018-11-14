@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minecraft-server
+spec:
+  serviceName: minecraft-service
+  replicas: 2
+  selector:
+    matchLabels:
+      app: minecraft-server
+  template:
+    metadata:
+      labels:
+        app: minecraft-server
+    spec:
+      containers:
+      - name: minecraft-server
+        image: openhack/minecraft-server
+        ports:
+        - containerPort: 25565
+          name: minecraft
+        volumeMounts:
+        - name: myvolume
+          mountPath: /data
+        env:
+        - name: EULA
+          value: "True"
+  volumeClaimTemplates:
+  - metadata:
+      name: myvolume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
