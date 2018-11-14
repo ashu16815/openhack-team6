@@ -23,3 +23,17 @@ spec:
         env:
           - name: EULA
             value: "TRUE"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-server
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 25565
+    name: default
+  - port: 25575
+    name: rcon
+  selector:
+    app: minecraft-server
